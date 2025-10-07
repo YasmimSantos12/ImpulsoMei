@@ -1,0 +1,91 @@
+ body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Botão hamburguer */
+        .hamburger {
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            font-size: 28px;
+            /* maior no celular */
+            cursor: pointer;
+            z-index: 1001;
+            background: none;
+            border: none;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        /* Menu lateral */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -260px;
+            /* fora da tela quando inativa */
+            width: 260px;
+            height: 100%;
+            background: #e18deeff;
+            color: white;
+            transition: left 0.3s ease;
+            padding: 20px;
+            z-index: 1000;
+            padding-top: 50px;
+            pointer-events: none;
+            /* impede cliques quando escondida */
+            opacity: 0;
+            /* invisível quando escondida */
+        }
+
+        .sidebar.active {
+            left: 0;
+            pointer-events: auto;
+            /* ativa cliques */
+            opacity: 1;
+            /* visível */
+        }
+
+        .sidebar h2 {
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar ul li {
+            margin: 20px 0;
+        }
+
+        .sidebar ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+        }
+
+        /* Conteúdo */
+        main {
+            padding: 20px;
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 70%;
+                /* ocupa mais espaço no celular */
+                max-width: 300px;
+            }
+
+            .sidebar ul li a {
+                font-size: 20px;
+                /* links maiores no mobile */
+            }
+
+            .hamburger {
+                font-size: 32px;
+                /* botão maior */
+            }
+        }
