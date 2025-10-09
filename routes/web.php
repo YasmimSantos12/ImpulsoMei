@@ -21,3 +21,7 @@ Route::get('/logout',[AuthController::class,'logout'])->name('logout');
 
 Route::get('/cadastro-produto',[ProdutoController::class,'index'])->name('form_cadastro_produto')->middleware('auth:negocio');
 Route::post('/cadastro-produto',[ProdutoController::class,'cadastrar'])->name('cadastro_produto')->middleware('auth:negocio');
+
+Route::get('/testes',function(){
+    return "Olá Mundo";
+});
