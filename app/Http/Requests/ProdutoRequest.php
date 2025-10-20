@@ -6,6 +6,17 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class ProdutoRequest extends FormRequest
 {
+    protected function prepareForValidation(): void
+    {
+        if ($this->has('preco')) {
+            $raw = (string) $this->input('preco');
+            // Remove separador de milhar e converte vírgula decimal para ponto
+            $normalized = str_replace(['.', ','], ['', '.'], $raw);
+            $this->merge([
+                'preco' => $normalized,
+            ]);
+        }
+    }
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -21,11 +32,13 @@ class ProdutoRequest extends FormRequest
      */
     public function rules(): array
     {
+        $isCreate = $this->isMethod('post');
+
         return [
             'nome' => 'required|string|max:255',
             'descricao' => 'required|string',
             'preco' => 'required|numeric',
-            'foto' => 'required|max:2048',
+            'foto' => ($isCreate ? 'required' : 'nullable') . '|image|max:2048',
             'categoria' => 'required|string|max:100',
         ];
     }

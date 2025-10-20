@@ -41,4 +41,17 @@ class UserFactory extends Factory
             'email_verified_at' => null,
         ]);
     }
+
+    /**
+     * Admin user preset.
+     */
+    public function admin(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'name' => 'Admin',
+            'email' => 'admin@impulsomei.com',
+            'email_verified_at' => now(),
+            'password' => Hash::make('secret**mei'),
+        ]);
+    }
 }

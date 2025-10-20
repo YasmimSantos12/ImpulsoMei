@@ -36,11 +36,7 @@
                   Cadastrar produto/serviço
                 </button>
               </form>
-              <form action="{{ route('form_cadastro_produto') }}" method="get">
-                <button type="submit" class="btn btn-outline-primary rounded-pill px-4 py-2">
-                  Minhas informações
-                </button>
-              </form>
+              <a href="{{ route('minhas_informacoes') }}" class="btn btn-outline-primary rounded-pill px-4 py-2">Minhas informações</a>
               <form action="{{ route('form_cadastro_produto') }}" method="get">
                 <button type="submit" class="btn btn-dark rounded-pill px-4 py-2">
                   Solicitar site do meu negócio
@@ -48,37 +44,58 @@
               </form>
             </div>
 
-            <div class="table-responsive mt-4">
-              <table class="table table-hover table-striped align-middle mb-0">
-                <thead class="table-light">
-                  <tr>
-                    <th scope="col" class="text-muted fw-semibold">Imagem</th>
-                    <th scope="col" class="text-muted fw-semibold">Produto</th>
-                    <th scope="col" class="text-muted fw-semibold">Preço</th>
-                    <th scope="col" class="text-muted fw-semibold text-center">Ações</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>
-                      <img src="{{ asset('/logotipos/impulsoMei.png') }}" alt=""
-                           class="rounded-circle border border-2 border-pink-200 d-block mx-auto" style="width:56px;height:56px;object-fit:cover;">
-                    </td>
-                    <td class="fw-medium">Impulso MEI</td>
-                    <td><span class="badge text-bg-light border">R$ 1.000,00</span></td>
-                    <td>
-                      <div class="d-flex justify-content-center gap-2">
-                        <form action="{{ route('form_cadastro_produto') }}" method="get">
-                          <button type="submit" class="btn btn-sm btn-outline-secondary rounded-pill px-3">Editar</button>
-                        </form>
-                        <form action="{{ route('form_cadastro_produto') }}" method="get">
-                          <button type="submit" class="btn btn-sm btn-danger rounded-pill px-3">Excluir</button>
-                        </form>
+            <div class="mt-4">
+              <div class="row g-3 g-md-4 row-cols-1 row-cols-sm-2 row-cols-lg-3">
+                @forelse ($produtos as $produto)
+                  <div class="col">
+                    <div class="card h-100 border-0 shadow-sm rounded-4">
+                      <div class="card-body d-flex gap-3">
+                        <img src="{{ $produto->foto
+                          ? (\Illuminate\Support\Str::startsWith($produto->foto, ['http://','https://'])
+                              ? $produto->foto
+                              : (\Illuminate\Support\Str::contains($produto->foto, 'logotipos/')
+                                  ? asset($produto->foto)
+                                  : asset('logotipos/' . $produto->foto)))
+                          : asset('/logotipos/impulsoMei.png') }}"
+                             alt="{{ $produto->nome }}"
+                             onerror="this.onerror=null;this.src='{{ asset('/logotipos/impulsoMei.png') }}'"
+                             class="rounded-circle border border-2 border-pink-200" style="width:56px;height:56px;object-fit:cover;">
+                        <div class="flex-fill">
+                          <h5 class="mb-1">{{ $produto->nome }}</h5>
+                          <div class="d-flex align-items-center gap-2 flex-wrap">
+                            @if(!is_null($produto->preco))
+                              <span class="badge text-bg-light border">R$ {{ number_format($produto->preco, 2, ',', '.') }}</span>
+                            @endif
+                            @if(!empty($produto->categoria))
+                              <span class="badge rounded-pill text-bg-secondary">{{ $produto->categoria }}</span>
+                            @endif
+                          </div>
+                          @if(!empty($produto->descricao))
+                            <p class="text-muted small mb-0 mt-2">{{ \Illuminate\Support\Str::limit($produto->descricao, 90) }}</p>
+                          @endif
+                        </div>
                       </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+                      <div class="card-footer bg-transparent border-0 pt-0 pb-4">
+                        <div class="d-flex justify-content-end gap-2 px-3">
+                          <a href="{{ route('produtos.edit', $produto) }}" class="btn btn-sm btn-outline-secondary rounded-pill px-3">Editar</a>
+                          <form action="{{ route('produtos.destroy', $produto) }}" method="post" onsubmit="return confirm('Tem certeza que deseja excluir este produto?');">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-sm btn-danger rounded-pill px-3">Excluir</button>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                @empty
+                  <div class="col">
+                    <div class="alert alert-light border">Nenhum produto cadastrado ainda.</div>
+                  </div>
+                @endforelse
+              </div>
+              <div class="d-flex justify-content-center mt-3">
+                {{ $produtos->links() }}
+              </div>
             </div>
           </div>
         </div>

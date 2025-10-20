@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\AuthRequest;
 use App\Models\Negocio;
+use App\Models\Produto;
 use Auth;
 use Illuminate\Http\Request;
 
@@ -39,6 +40,7 @@ class AuthController extends Controller
 
     public function home(){
         $user = Negocio::findOrFail(Auth::guard('negocio')->id());
-        return view('negocio.home',compact('user'));
+        $produtos = Produto::where('negocio_id', $user->id)->latest()->paginate(9);
+        return view('negocio.home', compact('user', 'produtos'));
     }
 }
