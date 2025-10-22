@@ -1,13 +1,19 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\NegocioController;
 use App\Http\Controllers\ProdutoController;
+use App\Http\Controllers\PublicController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Rotas Públicas - Portal de Produtos
+Route::get('/', [PublicController::class, 'index'])->name('public.index');
+Route::get('/produtos', [PublicController::class, 'produtos'])->name('public.produtos');
+Route::get('/negocios', [PublicController::class, 'negocios'])->name('public.negocios');
+Route::get('/produto/{id}', [PublicController::class, 'produto'])->name('public.produto');
+Route::get('/negocio/{id}', [PublicController::class, 'negocio'])->name('public.negocio');
+Route::get('/busca', [PublicController::class, 'busca'])->name('public.busca');
 //Rotas responsaveis por carregara view de cadastro e realizar a logica de cadastro
 Route::get('/cadastro',[NegocioController::class,'indexCadastro'])->name('form_cadastro_negocio');
 Route::post('/cadastro',[NegocioController::class,'cadastro'])->name('cadastro_negocio');
@@ -32,4 +38,18 @@ Route::put('/perfil', [NegocioController::class, 'updateProfile'])->name('perfil
 
 Route::get('/testes',function(){
     return "Olá Mundo";
+});
+
+// Rotas do Admin
+Route::prefix('admin')->group(function () {
+    Route::get('/login', [AdminController::class, 'loginForm'])->name('admin.login');
+    Route::post('/login', [AdminController::class, 'login'])->name('admin.login.post');
+    Route::get('/logout', [AdminController::class, 'logout'])->name('admin.logout');
+    
+    Route::middleware(['admin'])->group(function () {
+        Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+        Route::get('/usuarios', [AdminController::class, 'usuarios'])->name('admin.usuarios');
+        Route::get('/usuarios/{id}', [AdminController::class, 'verUsuario'])->name('admin.ver-usuario');
+        Route::delete('/usuarios/{id}', [AdminController::class, 'removerUsuario'])->name('admin.remover-usuario');
+    });
 });
