@@ -142,9 +142,7 @@
                     <li><a href="{{ route('public.negocios') }}" class="{{ request()->routeIs('public.negocios') ? 'active' : '' }}">
                         <i class="fas fa-store me-2"></i>Negócios
                     </a></li>
-                    <li><a href="{{ route('form_cadastro_negocio') }}">
-                        <i class="fas fa-user-plus me-2"></i>Cadastrar Negócio
-                    </a></li>
+                    
                     <li><a href="{{ route('form_login_negocio') }}">
                         <i class="fas fa-sign-in-alt me-2"></i>Área do Empreendedor
                     </a></li>

@@ -112,9 +112,9 @@
     {{-- Menu lateral --}}
     <aside class="sidebar" id="sidebar">
         <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="/sobre">Sobre</a></li>
-            <li><a href="/contato">Contato</a></li>
+            <li><a href="/">Página Pública</a></li>
+            <li><a href="/cadastro-produto">Cadastrar Produto</a></li>
+            <li><a href="/minhas-informacoes">Meu Perfil</a></li>
             <li> <a href="{{ route('logout') }}">Sair</a></li>
         </ul>
     </aside>

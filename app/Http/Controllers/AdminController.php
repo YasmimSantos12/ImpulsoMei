@@ -17,24 +17,24 @@ class AdminController extends Controller
     {
         // Contar total de negócios cadastrados
         $totalNegocios = Negocio::count();
-        
+
         // Contar total de produtos cadastrados
         $totalProdutos = Produto::count();
-        
+
         // Contar total de usuários (negócios)
         $totalUsuarios = Negocio::count();
-        
+
         // Buscar negócios recentes
         $negociosRecentes = Negocio::latest()->take(5)->get();
-        
+
         // Buscar produtos recentes
         $produtosRecentes = Produto::with('negocio')->latest()->take(5)->get();
 
         return view('admin.dashboard', compact(
-            'totalNegocios', 
-            'totalProdutos', 
-            'totalUsuarios', 
-            'negociosRecentes', 
+            'totalNegocios',
+            'totalProdutos',
+            'totalUsuarios',
+            'negociosRecentes',
             'produtosRecentes'
         ));
     }
@@ -45,7 +45,7 @@ class AdminController extends Controller
     public function usuarios()
     {
         $usuarios = Negocio::with('produtos')->latest()->paginate(10);
-        
+
         return view('admin.usuarios', compact('usuarios'));
     }
 
@@ -55,7 +55,7 @@ class AdminController extends Controller
     public function verUsuario($id)
     {
         $usuario = Negocio::with('produtos')->findOrFail($id);
-        
+
         return view('admin.ver-usuario', compact('usuario'));
     }
 
@@ -65,13 +65,13 @@ class AdminController extends Controller
     public function removerUsuario($id)
     {
         $usuario = Negocio::findOrFail($id);
-        
+
         // Remove todos os produtos do usuário
         $usuario->produtos()->delete();
-        
+
         // Remove o usuário
         $usuario->delete();
-        
+
         return redirect()->route('admin.usuarios')->with('success', 'Usuário removido com sucesso!');
     }
 
@@ -110,5 +110,28 @@ class AdminController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         return redirect()->route('admin.login');
+    }
+
+    /**
+     * Gera relatórios em PDF
+     */
+    public function gerarRelatorio(Request $request)
+    {
+        $tipo = $request->input('tipo');
+        $filename = "relatorio-{$tipo}-" . date('Y-m-d') . ".pdf";
+
+        if ($tipo === 'usuarios') {
+            $dados = Negocio::latest()->get();
+            $view = 'admin.relatorios.usuarios';
+        } elseif ($tipo === 'produtos') {
+            $dados = Produto::with('negocio')->latest()->get();
+            $view = 'admin.relatorios.produtos';
+        } else {
+            return back()->with('error', 'Tipo de relatório inválido.');
+        }
+
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView($view, compact('dados'));
+
+        return $pdf->download($filename);
     }
 }

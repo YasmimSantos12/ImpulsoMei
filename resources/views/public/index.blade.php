@@ -33,9 +33,7 @@
                     <a href="{{ route('public.produtos') }}" class="btn btn-primary btn-lg rounded-pill px-4">
                       <i class="fas fa-search me-2"></i>Explorar Produtos
                     </a>
-                    <a href="{{ route('form_cadastro_negocio') }}" class="btn btn-outline-primary btn-lg rounded-pill px-4">
-                      <i class="fas fa-plus me-2"></i>Cadastrar Negócio
-                    </a>
+        
                   </div>
                 </div>
               </div>
