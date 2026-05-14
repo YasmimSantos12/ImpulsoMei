@@ -47,6 +47,8 @@
 
                     <button type="submit" class="rounded-full bg-pink-600 text-teal-50 w-32 pr-4 pl-4 pt-2 pb-2">Login</button>
                     <br><br>
+                    <a href="{{ route('password.request') }}">Esqueceu a senha?</a>
+                    <br><br>
                     <a href="{{ route('form_cadastro_negocio') }}">Ainda não é cadastrada?</a>
                 </form>
             </div>

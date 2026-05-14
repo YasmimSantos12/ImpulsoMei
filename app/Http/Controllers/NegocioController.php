@@ -38,7 +38,7 @@ class NegocioController extends Controller
                 'endereco' => $request->endereco,
                 'name_negocio' => $request->name_negocio,
                 'type_servico' => $request->type_servico,
-                'logotipo' => $fileNameToStore
+                'logotipo' => 'logotipos/' . $fileNameToStore
             ]);
             return redirect()->route('form_login_negocio')->with('success','Negócio Cadastrado com Sucesso!');
         } catch (Exception $e) {
@@ -74,6 +74,10 @@ class NegocioController extends Controller
 
         try {
             if ($request->hasFile('logotipo')) {
+                // Delete old logotipo if exists
+                if ($user->logotipo && file_exists(public_path($user->logotipo))) {
+                    unlink(public_path($user->logotipo));
+                }
                 $filenameWithExt= $request->file('logotipo')->getClientOriginalName();
                 $fileName = pathinfo($filenameWithExt,PATHINFO_FILENAME);
                 $extension = $request->file('logotipo')->getClientOriginalExtension();

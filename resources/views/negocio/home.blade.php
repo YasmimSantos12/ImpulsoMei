@@ -37,11 +37,6 @@
                 </button>
               </form>
               <a href="{{ route('minhas_informacoes') }}" class="btn btn-outline-primary rounded-pill px-4 py-2">Minhas informações</a>
-              <form action="{{ route('form_cadastro_produto') }}" method="get">
-                <button type="submit" class="btn btn-dark rounded-pill px-4 py-2">
-                  Solicitar site do meu negócio
-                </button>
-              </form>
             </div>
 
             <div class="mt-4">

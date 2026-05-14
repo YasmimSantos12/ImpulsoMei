@@ -66,8 +66,10 @@ class AdminController extends Controller
     {
         $usuario = Negocio::findOrFail($id);
 
-        // Remove todos os produtos do usuário
-        $usuario->produtos()->delete();
+        // Remove todos os produtos do usuário (deletando um por um para acionar eventos)
+        foreach ($usuario->produtos as $produto) {
+            $produto->delete();
+        }
 
         // Remove o usuário
         $usuario->delete();

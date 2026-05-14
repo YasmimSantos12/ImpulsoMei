@@ -21,6 +21,11 @@ Route::post('/cadastro', [NegocioController::class, 'cadastro'])->name('cadastro
 Route::get('/login', [AuthController::class, 'index'])->name('form_login_negocio');
 Route::post('/login', [AuthController::class, 'logar'])->name('login_negocio');
 
+Route::get('/forgot-password', [AuthController::class, 'showForgotPassword'])->name('password.request');
+Route::post('/forgot-password', [AuthController::class, 'sendResetLink'])->name('password.email');
+Route::get('/reset-password/{token}', [AuthController::class, 'showResetPassword'])->name('password.reset');
+Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('password.update');
+
 Route::get('/home', [AuthController::class, 'home'])->name('home')->middleware('auth:negocio');
 
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');

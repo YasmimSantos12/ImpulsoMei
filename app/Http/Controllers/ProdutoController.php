@@ -60,6 +60,10 @@ class ProdutoController extends Controller
         $data = $request->validated();
         try {
             if($request->hasFile('foto')){
+                // Delete old foto if exists
+                if ($produto->foto && file_exists(public_path($produto->foto))) {
+                    unlink(public_path($produto->foto));
+                }
                 $filenameWithExt= $request->file('foto')->getClientOriginalName();
                 $fileName = pathinfo($filenameWithExt,PATHINFO_FILENAME);
                 $extension = $request->file('foto')->getClientOriginalExtension();
@@ -78,9 +82,6 @@ class ProdutoController extends Controller
     {
         $this->ensureOwnership($produto);
         try {
-            if ($produto->foto && file_exists(public_path($produto->foto))) {
-                @unlink(public_path($produto->foto));
-            }
             $produto->delete();
             return redirect()->route('home')->with('success','Produto excluído com sucesso!');
         } catch (Exception $e) {
